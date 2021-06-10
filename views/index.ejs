@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <meta name="google-signin-client_id" content="551861593621-s6u2ogkjt31iof0hf0a1ojt9prsa3ijb.apps.googleusercontent.com">
+
+    <style type="text/css">
+		.navbar .navbar-nav .nav-link:hover {
+		  color: #0d6efd;
+		}
+		.navbar .navbar-nav .nav-link {
+		  position: relative;
+		}
+		.navbar .navbar-nav .nav-link::after {
+		  position: absolute;
+		  bottom: 0;
+		  left: 0;
+		  right: 0;
+		  margin: auto;
+		  background-color: #0d6efd;
+		  color: transparent;
+		  width: 0%;
+		  content: '';
+		  height: 3px;
+		  transition: all 0.5s;
+		}
+		.navbar .navbar-nav .nav-link:hover::after {
+		  width: 100%;
+		}
+		.i-circle {
+		    background: rgba(255, 255, 255, 0.3);
+		    color: #fff;
+		    padding: 1px 15px;
+		    border-radius: 50%;
+		    font-size: 35px;
+		}
+		.getbonustext {
+			font-size: 15px;
+		}
+		.getbonustext1 {
+			font-size: 14px;
+		}
+    </style>
+
+    <title>Carix</title>
+  </head>
+  <body style="background-color: #e0e8f3;" onload="testIsSignedIn()">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+	<nav class="navbar navbar-light bg-primary">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="#" style="color: white; font-weight: bold;">
+	      <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+	      Carix
+	    </a>
+	  </div>
+	</nav>
+	<nav class="navbar navbar-expand-lg navbar-light shadow p-3 mb-5 bg-white rounded">
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler9"
+	        aria-controls="navbarToggler9" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="container">
+	    <div class="collapse navbar-collapse" id="navbarToggler9">
+	        <ul class="navbar-nav" style="flex-grow: 1;">
+	            <li class="nav-item">
+	                <a style="font-weight: bold;" class="nav-link text-primary" href="/">Главная</a>
+	            </li>
+	            <li class="nav-item">
+	                <a style="font-weight: bold;" class="nav-link text-primary" href="#">Честная игра</a>
+	            </li>
+	            <li class="nav-item">
+	                <a style="font-weight: bold;" class="nav-link text-primary" href="#">Как играть</a>
+	            </li>
+	            <li class="nav-item">
+	                <a style="font-weight: bold;" class="nav-link text-primary" href="#">FAQ</a>
+	            </li>
+	           	<li class="nav-item">
+	                <a style="font-weight: bold;" class="nav-link text-primary" href="#">Выплаты</a>
+	            </li>
+	        </ul>
+					<button onclick="window.location.href='https://vk.com/public205061357';" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+					  Группа ВК
+					</button>
+	    </div>
+		</div>
+	</nav>
+	<div class="container">
+	  <div class="row">
+	    <div class="col-sm-3">
+		<div class="card shadow p-3 mb-5 bg-white rounded">
+		  <div class="card-body">
+		  	<center>
+		  	<div id="signBnt">
+			    <h5 class="card-title">Авторизация</h5>
+			    <br/>
+					<button onclick="vkAuthLogin()" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+					  Sign in VK
+					</button>
+		  	</div>
+				<div style="display: none;" id="logoutBnt">
+					<p class="getbonustext">Для получения денежного бонуса</p>
+					<p class="getbonustext1">1. Подписаться на наш паблик, <a href="/" style="color: #28a745;" class="getbonustext1">ссылка</a></p>
+					<p class="getbonustext1">2. Введите ссылку на Вашу страницу для проверки</p>
+					<p class="getbonustext">ВНИМАНИЕ!!! Вводите правильный формат ссылки.</p>
+					<input style="text-align: center;" type="text" class="form-control" id="pwd" placeholder="https://vk.com/durov">
+					<div style="margin-top: 7px;"></div>
+					<button style="width: 100%;" type="submit" class="btn btn-primary btn-block" >Получить бонус</button>
+					<div style="margin-top: 7px;"></div>
+					<button style="width: 100%;" onclick="vkLogOut()" type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off">
+					  Log out VK
+					</button>
+				</div>
+				</center>
+		  </div>
+		</div>
+		<div id="profileCard" style="display: none;" class="card shadow p-3 mb-5 bg-primary rounded">
+		  <div class="card-body">
+		    <center>
+					<div class="row">
+						<div class="col-6 col-md-4">
+							<span id="vkavatar" class="i-circle"></span>
+						</div>
+					  <div class="col-12 col-md-8">
+					  	<h6 id="username" style="color: white; font-weight: bold;"></h6>
+					  	<h6 style="color: white; font-weight: bold;">Баланс: 0</h6>
+					  </div>
+					</div>
+					<br/>
+					<div class="row">
+					  <div class="col">
+					  	<button style="font-weight: bold;" type="button" class="btn btn-light">Пополнить</button>
+					  </div>
+					  <div class="col">
+					  	<button style="font-weight: bold;" type="button" class="btn btn-light">Вывести</button>
+					  </div>
+					</div>
+				</center>
+		  </div>
+		</div>
+	    </div>
+	    <div class="col">
+		<div class="card shadow p-3 mb-5 bg-white rounded">
+		  <div class="card-body">
+			<div class="row">
+			  <div class="col-6">
+				<div class="row">
+				  <div class="col-4">
+				  	<h5>Сумма</h5>
+					<input style="text-align: center;" type="text" class="form-control" value="1" id="pwd">
+					<div class="row justify-content-center">
+						<div class="col-4">
+							<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">x2</button>
+						<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">Max</button>
+						</div>
+						<div class="col-6">
+							<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px" type="button" class="btn btn-secondary btn-sm">1/2</button>
+						<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">Min</button>
+						</div>
+					</div>
+				  </div>
+				  <div class="col-4">
+				  	<h5>Процент</h5>
+					<input style="text-align: center;" type="text" class="form-control" value="90" id="pwd">
+					<div class="row justify-content-center">
+						<div class="col-4">
+							<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">x2</button>
+						<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">Max</button>
+						</div>
+						<div class="col-6">
+							<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px" type="button" class="btn btn-secondary btn-sm">1/2</button>
+						<button style="background-color: #e9eff9; color: #495463; font-size: 11px; font-weight: bold; margin-top: 10px;" type="button" class="btn btn-secondary btn-sm">Min</button>
+						</div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-6">
+			  	<center>
+			  		<div style="font-size: 70px; color: #253992;">1.11</div>
+			  		<div style="font-size: 20px; color: #253992;">Возможный выигрыш</div>
+			  		<br/>
+			  		<div class="row">
+			  			<div class="col-6">
+			  				<div style="color: #758698; font-size: 13px; font-weight: bold;">0-899999</div>
+			  				<button style="margin-top: 10px;" type="button" class="btn btn-secondary">Меньше</button>
+			  			</div>
+			  			<div class="col-6">
+			  				<div style="color: #758698; font-size: 13px; font-weight: bold;">100000-999999</div>
+			  				<button style="margin-top: 10px;" type="button" class="btn btn-secondary">Больше</button>
+			  			</div>
+			  		</div>
+			  	</center>
+			  </div>
+			</div>
+			<div style="color: #253992; font-size: 1.3em; font-weight: 500; margin: 0;">Последние игры</div>
+			<br/>
+			<table class="table table-bordered">
+			  <thead>
+			    <tr>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">ИГРОК</th>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">ЧИСЛО</th>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">ЦЕЛЬ</th>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">СУММА</th>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">ШАНС</th>
+			      <th style="color: #2c80ff; font-weight: 700; white-space: nowrap;" scope="col">ВЫИГРЫШ</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Андрей Ревков</td>
+			      <td style="color: #28a745; font-weight: bold;">676493</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Владимир Кудрявцев</td>
+			      <td style="color: #28a745; font-weight: bold;">789467</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">766423</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">1234356</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">987640</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Андрей Ревков</td>
+			      <td style="color: #28a745; font-weight: bold;">899487</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Владимир Кудрявцев</td>
+			      <td style="color: #28a745; font-weight: bold;">123789</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">247892</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">901821</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">127081</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Андрей Ревков</td>
+			      <td style="color: #28a745; font-weight: bold;">192711</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Владимир Кудрявцев</td>
+			      <td style="color: #28a745; font-weight: bold;">178921</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">789237</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">877495</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Евгений Ушанов</td>
+			      <td style="color: #28a745; font-weight: bold;">555555</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Андрей Ревков</td>
+			      <td style="color: #28a745; font-weight: bold;">898976</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			    <tr>
+			      <td style="color: #253992; font-weight: bold;">Владимир Кудрявцев</td>
+			      <td style="color: #28a745; font-weight: bold;">987654</td>
+			      <td>@mdo</td>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			  </tbody>
+			</table>
+		  </div>
+		</div>
+	    </div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+
+		function vkAuthLogin() {
+		  VK.init({
+		    apiId: 7876538
+		  });
+
+			VK.Auth.login(function(response) {
+			  if (response.session) {
+			  	setUserData(response.session.user.first_name, response.session.user.last_name);
+			  }
+			});
+		}
+
+		function vkLogOut() {
+	  	let profileCard = document.getElementById('profileCard');
+	  	let signBnt = document.getElementById('signBnt');
+	  	let logoutBtn = document.getElementById('logoutBnt');
+			localStorage.removeItem("first_name");
+			localStorage.removeItem("last_name");
+	  	profileCard.style.display = "none";
+	  	logoutBtn.style.display = "none";
+	  	signBnt.style.display = "block";
+		}
+
+		function setUserData(first_name, last_name) {
+			if (first_name === null || last_name === null) {
+				console.log("null user");
+			} else {
+		  	let profileCard = document.getElementById('profileCard');
+		  	let signBnt = document.getElementById('signBnt');
+		  	let logoutBtn = document.getElementById('logoutBnt');
+		  	let username = document.getElementById("username").innerHTML = first_name + " " + last_name;
+		  	let vkavatar = document.getElementById("vkavatar").innerHTML = first_name[0];
+		  	profileCard.style.display = "block";
+		  	logoutBtn.style.display = "block";
+		  	signBnt.style.display = "none";
+		  	console.log(first_name);
+		  	console.log(last_name);
+		  	localStorage.setItem('first_name', first_name);
+		  	localStorage.setItem('last_name', last_name);
+			}
+		}
+
+		function testIsSignedIn() {
+			if (setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name")) == null) {
+				console.log("no user to sign in");
+			} else {
+				setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name"));
+			}
+		}
+	</script>
+  </body>
+</html>

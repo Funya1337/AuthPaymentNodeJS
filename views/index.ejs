@@ -57,7 +57,7 @@
 	<nav class="navbar navbar-light bg-primary">
 	  <div class="container-fluid">
 	    <a class="navbar-brand" href="#" style="color: white; font-weight: bold;">
-	      <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+	      <img src="./images/Ca1.png" width="30" height="24" class="d-inline-block align-text-top">
 	      Carix
 	    </a>
 	  </div>
@@ -366,7 +366,8 @@
 
 			VK.Auth.login(function(response) {
 			  if (response.session) {
-			  	setUserData(response.session.user.first_name, response.session.user.last_name);
+				console.log(response.session);
+			  	setUserData(response.session.user.first_name, response.session.user.last_name, response.session.user.id);
 			  }
 			});
 		}
@@ -382,31 +383,70 @@
 	  	signBnt.style.display = "block";
 		}
 
-		function setUserData(first_name, last_name) {
-			if (first_name === null || last_name === null) {
-				console.log("null user");
-			} else {
-		  	let profileCard = document.getElementById('profileCard');
-		  	let signBnt = document.getElementById('signBnt');
-		  	let logoutBtn = document.getElementById('logoutBnt');
-		  	let username = document.getElementById("username").innerHTML = first_name + " " + last_name;
-		  	let vkavatar = document.getElementById("vkavatar").innerHTML = first_name[0];
-		  	profileCard.style.display = "block";
-		  	logoutBtn.style.display = "block";
-		  	signBnt.style.display = "none";
-		  	console.log(first_name);
-		  	console.log(last_name);
-		  	localStorage.setItem('first_name', first_name);
-		  	localStorage.setItem('last_name', last_name);
-			}
+		function setUserData(first_name, last_name, userId) {
+			const data = { first_name, last_name, userId };
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			};
+			const response = fetch('post-example', options)
+				.then((res) => {
+					const status = res.status;
+					if (status == 200) {
+						if (first_name === null || last_name === null) {
+							console.log("null user");
+						} else {
+						let profileCard = document.getElementById('profileCard');
+						let signBnt = document.getElementById('signBnt');
+						let logoutBtn = document.getElementById('logoutBnt');
+						let username = document.getElementById("username").innerHTML = first_name + " " + last_name;
+						let vkavatar = document.getElementById("vkavatar").innerHTML = first_name[0];
+						profileCard.style.display = "block";
+						logoutBtn.style.display = "block";
+						signBnt.style.display = "none";
+						localStorage.setItem('userId', userId);
+						}
+					}
+					console.log(status);
+				})
+			// if (first_name === null || last_name === null) {
+			// 	console.log("null user");
+			// } else {
+		  	// let profileCard = document.getElementById('profileCard');
+		  	// let signBnt = document.getElementById('signBnt');
+		  	// let logoutBtn = document.getElementById('logoutBnt');
+		  	// let username = document.getElementById("username").innerHTML = first_name + " " + last_name;
+		  	// let vkavatar = document.getElementById("vkavatar").innerHTML = first_name[0];
+		  	// profileCard.style.display = "block";
+		  	// logoutBtn.style.display = "block";
+		  	// signBnt.style.display = "none";
+			// }
 		}
 
 		function testIsSignedIn() {
-			if (setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name")) == null) {
-				console.log("no user to sign in");
-			} else {
-				setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name"));
-			}
+			fetch('/all-blogs')
+				.then(response => response.json())
+				.then(data => {
+					for (let i = 0; i < data.length; i++) {
+						if (data[i].userId == localStorage.getItem("userId")) {
+							if (data[i].signedIn) {
+								setUserData(data[i].first_name, data[i].last_name, data[i].userId);
+							}
+						}
+					}
+				});
+			
+			// setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name"))
+			
+			
+			// if (setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name")) == null) {
+			// 	console.log("no user to sign in");
+			// } else {
+			// 	setUserData(localStorage.getItem("first_name"), localStorage.getItem("last_name"));
+			// }
 		}
 	</script>
   </body>

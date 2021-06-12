@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Blog = require('./models/blog');
+const path = require('path');
 const app = express();
 app.use(express.json({ limit: '1mb' }))
 
@@ -13,6 +14,8 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 	.catch((err) => console.log(err));
 
 // Middleware
+app.use(express.static(__dirname + '/views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.post('/post-example', (req, res) => {

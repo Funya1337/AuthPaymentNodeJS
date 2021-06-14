@@ -225,7 +225,7 @@
 						<div style="align-self: center; margin-right: 10px;">
 							<img style="cursor: pointer;" src="./images/icons8-coin-wallet-128.png" width="25px" height="25px">
 						</div>
-						<div style="align-self: center; margin-right: 21px;">0</div>
+						<div id="balance" style="align-self: center; margin-right: 21px;">0</div>
 						<button type="button" class="btn btn-xs" style="color: #bbb4dd; margin-right: 10px;">Вывод</button>
 						<button type="button" class="btn moneyBtn">Пополнить</button>
 					</div>
@@ -287,32 +287,55 @@
 		</div>
 	    </div>
 	    <div class="col-sm-10">
-			<div class="card cardStyle shadow p-3 mb-5 bg-white">
-				<button style="color: #fff;" type="button" class="btn btn-warning">Получай бонусы к первому депозиту прямо сейчас!</button>
+			<div id="bounusElement" class="card cardStyle shadow p-3 mb-5 bg-white" style="display: none;">
+				  <button style="color: #fff;" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					Получай бонус к первому депозиту прямо сейчас!
+				  </button>
+				  
+				  <!-- Modal -->
+				  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h5 class="modal-title" id="exampleModalLabel">Получай бонусы к первому депозиту!</h5>
+						  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							<div>1. Чтобы получить бонус к депозиту, нужно подписаться на группу в <a href="https://vk.com/public205061357">ВК</a></div>
+							<br/>
+							<div id="bonusGroupErrMsg" style="color: red; display: none;">Вы не подписались на группу</div>
+						</div>
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Выйти</button>
+						  <button id="checkBonusBtn" onclick="vkGetBonusFunction()" type="button" class="btn btn-primary">Проверить подписку</button>
+						</div>
+					  </div>
+					</div>
+				  </div>
 			</div>
 			<div class="row">
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 			  </div>
@@ -320,25 +343,25 @@
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card cardStyle shadow p-3 mb-5 bg-white" style="display: flex; flex-direction: row;">
 						<img width="150" height="150" src="./images/Mines.png">
-						<div style="position: absolute; top: 30%; left: 50%; font-size: 50px;">Mines</div>
+						<div style="position: absolute; top: 30%; left: 56%; font-size: 50px;">Mines</div>
 					</div>
 				</div>
 			  </div>
@@ -502,17 +525,45 @@
 	  </div>
 	</div>
 	<script type="text/javascript">
-
 		function vkAuthLogin() {
-		  VK.init({
-		    apiId: 7876538
-		  });
+			VK.init({
+				apiId: 7876538
+			});
 
 			VK.Auth.login(function(response) {
-			  if (response.session) {
+				if (response.session) {
 				console.log(response.session);
-			  	setUserData(response.session.user.first_name, response.session.user.last_name, response.session.user.id);
-			  }
+				setUserData(response.session.user.first_name, response.session.user.last_name, response.session.user.id);
+				}
+			});
+		}
+
+		function vkGetBonusFunction() {
+			VK.Api.call('groups.isMember', {user_id: localStorage.getItem("userId"), group_id: 205061357, v:"5.73"}, function(r) {
+				if(r.response) {
+					console.log(typeof(r.response));
+					if (r.response === 1) {
+						console.log("successful");
+						const userId = localStorage.getItem("userId");
+						const data = { userId }
+						const options = {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(data)
+						}
+						const response = fetch('/update-balance', options)
+							.then((res) => {
+								console.log(res);
+							})
+					}
+					else {
+						let bonusGroupErrMsg = document.getElementById("bonusGroupErrMsg");
+						bonusGroupErrMsg.style.display = "flex";
+					}
+					console.log(r.response)
+				}
 			});
 		}
 
@@ -528,6 +579,9 @@
 		}
 
 		function setUserData(first_name, last_name, userId) {
+			VK.init({
+				apiId: 7876538
+			});
 			const data = { first_name, last_name, userId };
 			const options = {
 				method: 'POST',
@@ -546,6 +600,7 @@
 							let signinCard = document.getElementById('signinCard');
 							let profileNav = document.getElementById('profileNav');
 							let navLinks = document.getElementById('navLinks');
+							let bounusElement = document.getElementById('bounusElement');
 							let userLetter = document.getElementById('userLetter').innerHTML = first_name[0];
 							// let profileCard = document.getElementById('profileCard');
 							// let signBnt = document.getElementById('signBnt');
@@ -553,6 +608,7 @@
 							// let username = document.getElementById("username").innerHTML = first_name + " " + last_name;
 							// let vkavatar = document.getElementById("vkavatar").innerHTML = first_name[0];
 							navLinks.style.display = "flex";
+							bounusElement.style.display = "flex";
 							signinCard.style.display = "none";
 							profileNav.style.display = "flex";
 							// profileCard.style.display = "block";
@@ -584,6 +640,7 @@
 					for (let i = 0; i < data.length; i++) {
 						if (data[i].userId == localStorage.getItem("userId")) {
 							if (data[i].signedIn) {
+								let balance = document.getElementById("balance").innerHTML = data[i].balance;
 								setUserData(data[i].first_name, data[i].last_name, data[i].userId);
 							}
 						}

@@ -30,8 +30,9 @@ app.post('/post-example', (req, res) => {
 	const blog = new Blog({
 		first_name: data.first_name,
 		last_name: data.last_name,
-		balance: 1000,
+		balance: 0,
 		signedIn: true,
+		gotBonus: false,
 		userId: data.userId
 	});
 
@@ -41,6 +42,33 @@ app.post('/post-example', (req, res) => {
 		})
 		.catch((err) => console.log(err));
 });
+
+app.post('/update-balance', (req, res) => {
+	const data = req.body;
+	Blog.findOne(data, function(err, blog) {
+		if (!blog.gotBonus) {
+			if (!err) {
+				if (!blog) {
+					blog = new Blog();
+					blog.userId = 143398090;
+				}
+				blog.balance += 10;
+				blog.gotBonus = true;
+				blog.save(function(err) {
+					if (!err) {
+						console.log(blog);
+					} else {
+						console.log("error");
+					}
+				})
+			}
+		}
+		console.log(blog);
+	})
+})
+
+app.get('/update-one', (req, res) => {
+})
 
 app.get('/add-blog', (req, res) => {
 	const blog = new Blog({

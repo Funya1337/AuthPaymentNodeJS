@@ -17,6 +17,9 @@ const blogSchema = new Schema({
     signedIn: {
         type: Boolean
     },
+    gotBonus: {
+        type: Boolean
+    },
     userId: {
         type: Number,
         unique: true

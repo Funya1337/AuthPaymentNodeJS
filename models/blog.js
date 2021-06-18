@@ -23,6 +23,9 @@ const blogSchema = new Schema({
     userId: {
         type: Number,
         unique: true
+    },
+    cookieRef: {
+        type: String
     }
 }, { timestamps: true });
 

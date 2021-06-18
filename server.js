@@ -1,11 +1,22 @@
 const express = require("express");
+const QiwiBillPaymentsAPI = require('@qiwi/bill-payments-node-js-sdk');
 const mongoose = require("mongoose");
 const Blog = require('./models/blog');
+const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 app.use(express.json({ limit: '1mb' }))
 
+const SECRET_KEY = 'eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6InptcG1ndC0wMCIsInVzZXJfaWQiOiI3OTc3NjMxNDE1OCIsInNlY3JldCI6Ijg3Y2IxYzM0YjU5Y2M4MmNiZGIxZTY2N2I5YjcxZmVjMzA3ZWQ2Yzg2ZDdlYjQ2MDY3YzQ4Y2ZmNzljMTU0OTUifX0=';
+
+let counter = 0;
+
+const qiwiApi = new QiwiBillPaymentsAPI(SECRET_KEY);
+
 const PORT = process.env.PORT || 8080;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 // connect to MongoDB
 const dbURI = 'mongodb+srv://retro:Britva01@nodegambit.hjc0u.mongodb.net/example-db?retryWrites=true&w=majority';
@@ -18,29 +29,80 @@ app.use(express.static(__dirname + '/views'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.post('/post-example', (req, res) => {
+app.post('/payment', (req, res) => {
 	console.log(req.body);
-	const data = req.body;
-	res.json({
-		status: 'success',
-		firstName: data.first_name,
-		lastName: data.last_name,
-		userId: data.userId
-	});
-	const blog = new Blog({
-		first_name: data.first_name,
-		last_name: data.last_name,
-		balance: 0,
-		signedIn: true,
-		gotBonus: false,
-		userId: data.userId
-	});
+	const random = (length = 8) => {
+		return Math.random().toString(16).substr(2, length);
+	};
+	const publicKey = '48e7qUxn9T7RyYE1MVZswX1FRSbE6iyCj2gCRwwF3Dnh5XrasNTx3BGPiMsyXQFNKQhvukniQG8RTVhYm3iPzNytXGVvEQtUcQ3sez7YnWijV8DAaYfa9ri5FboXQ2VPzK2WdqpXsXakkxs3gaJfeg3STiS99VQPz6cN7UrTs6YjnHeX9aq3rGpdzTe76';
 
-	blog.save()
-		.then((result) => {
-			res.send(result);
-		})
-		.catch((err) => console.log(err));
+	const params = {
+		publicKey,
+		amount: parseInt(req.body.valueInput),
+		billId: random(36).toString(),
+		successUrl: 'http://localhost:8080/success',
+		email: 'm@ya.ru'
+	};
+	const link = qiwiApi.createPaymentForm(params);
+	const billInfo = qiwiApi.getBillInfo(params.billId).then(data => {return data});
+	res.json({
+		link: link,
+		billInfo: billInfo
+	})
+})
+
+app.get('/refs', (req, res) => {
+	res.render('ref');
+})
+
+app.post('/post-example', (req, res) => {
+	if (req.headers.cookie === undefined) {
+		const data = req.body;
+		res.json({
+			status: 'success',
+			firstName: data.first_name,
+			lastName: data.last_name,
+			userId: data.userId
+		});
+		const blog = new Blog({
+			first_name: data.first_name,
+			last_name: data.last_name,
+			balance: 0,
+			signedIn: true,
+			gotBonus: false,
+			userId: data.userId
+		});
+	
+		blog.save()
+			.then((result) => {
+				res.send(result);
+			})
+			.catch((err) => console.log(err));
+	} else {
+		const cookieRef = req.headers.cookie.substring(6);
+		const data = req.body;
+		res.json({
+			status: 'success',
+			firstName: data.first_name,
+			lastName: data.last_name,
+			userId: data.userId
+		});
+		const blog = new Blog({
+			first_name: data.first_name,
+			last_name: data.last_name,
+			balance: 0,
+			signedIn: true,
+			gotBonus: false,
+			userId: data.userId,
+			cookieRef: cookieRef
+		});
+	
+		blog.save()
+			.then((result) => {
+				res.send(result);
+			})
+			.catch((err) => console.log(err));
+	}
 });
 
 app.post('/update-balance', (req, res) => {
@@ -68,6 +130,7 @@ app.post('/update-balance', (req, res) => {
 })
 
 app.get('/update-one', (req, res) => {
+	res.redirect("http://example.com");
 })
 
 app.get('/add-blog', (req, res) => {
@@ -104,9 +167,29 @@ app.get('/', (req, res) => {
 	res.render('index');
 });
 
+app.get('/refsignin', (req, res) => {
+	res.cookie("refId", req.query.refid);
+	res.render('index');
+});
+
 app.get('/login', (req, res) => {
 	res.render('login');
 });
+
+// app.get('*', function(req, res) {
+// 	const url = req.originalUrl.substr(1);
+// 	Blog.find()
+// 	.then((result) => {
+// 		result.forEach(element => {
+// 			if (element.userId == url) {
+// 				res.send(element);
+// 			} else {
+// 				res.send("cannot find ref link");
+// 			}
+// 		});
+// 	})
+// 	.catch((err) => console.log(err));
+// });
 
 function listenMethod() {
 	app.listen(PORT, () => {

@@ -26,6 +26,9 @@ const blogSchema = new Schema({
     },
     cookieRef: {
         type: String
+    },
+    refNum: {
+        type: Number
     }
 }, { timestamps: true });
 

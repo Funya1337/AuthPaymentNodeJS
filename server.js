@@ -51,6 +51,10 @@ app.post('/payment', (req, res) => {
 	})
 })
 
+app.get('/mines', (req, res) => {
+	res.render('mines');
+})
+
 app.get('/refs', (req, res) => {
 	res.render('ref');
 })
@@ -70,7 +74,8 @@ app.post('/post-example', (req, res) => {
 			balance: 0,
 			signedIn: true,
 			gotBonus: false,
-			userId: data.userId
+			userId: data.userId,
+			refNum: 0
 		});
 	
 		blog.save()
@@ -94,7 +99,8 @@ app.post('/post-example', (req, res) => {
 			signedIn: true,
 			gotBonus: false,
 			userId: data.userId,
-			cookieRef: cookieRef
+			cookieRef: cookieRef,
+			refNum: 0
 		});
 	
 		blog.save()
@@ -104,6 +110,17 @@ app.post('/post-example', (req, res) => {
 			.catch((err) => console.log(err));
 	}
 });
+
+app.post('/update-ref-num', async (req, res) => {
+	const data = req.body;
+
+	const filter = { userId: data.userId };
+	const update = { refNum: data.cnt };
+
+	let doc = await Blog.findOne(filter);
+	await Blog.updateOne(filter, update);
+	await doc.save();
+})
 
 app.post('/update-balance', (req, res) => {
 	const data = req.body;
@@ -175,21 +192,6 @@ app.get('/refsignin', (req, res) => {
 app.get('/login', (req, res) => {
 	res.render('login');
 });
-
-// app.get('*', function(req, res) {
-// 	const url = req.originalUrl.substr(1);
-// 	Blog.find()
-// 	.then((result) => {
-// 		result.forEach(element => {
-// 			if (element.userId == url) {
-// 				res.send(element);
-// 			} else {
-// 				res.send("cannot find ref link");
-// 			}
-// 		});
-// 	})
-// 	.catch((err) => console.log(err));
-// });
 
 function listenMethod() {
 	app.listen(PORT, () => {

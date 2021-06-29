@@ -6,12 +6,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 app.use(express.json({ limit: '1mb' }))
+require('dotenv').config();
 
-const SECRET_KEY = 'eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6InptcG1ndC0wMCIsInVzZXJfaWQiOiI3OTc3NjMxNDE1OCIsInNlY3JldCI6Ijg3Y2IxYzM0YjU5Y2M4MmNiZGIxZTY2N2I5YjcxZmVjMzA3ZWQ2Yzg2ZDdlYjQ2MDY3YzQ4Y2ZmNzljMTU0OTUifX0=';
-
-let counter = 0;
-
-const qiwiApi = new QiwiBillPaymentsAPI(SECRET_KEY);
+const qiwiApi = new QiwiBillPaymentsAPI(process.env.SECRET_KEY);
 
 const PORT = process.env.PORT || 8080;
 
@@ -19,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // connect to MongoDB
-const dbURI = 'mongodb+srv://retro:Britva01@nodegambit.hjc0u.mongodb.net/example-db?retryWrites=true&w=majority';
+const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@nodegambit.hjc0u.mongodb.net/example-db?retryWrites=true&w=majority`;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then((result) => listenMethod(), console.log("connected to db"))
 	.catch((err) => console.log(err));
@@ -34,10 +31,11 @@ app.post('/payment', (req, res) => {
 	const random = (length = 8) => {
 		return Math.random().toString(16).substr(2, length);
 	};
-	const publicKey = '48e7qUxn9T7RyYE1MVZswX1FRSbE6iyCj2gCRwwF3Dnh5XrasNTx3BGPiMsyXQFNKQhvukniQG8RTVhYm3iPzNytXGVvEQtUcQ3sez7YnWijV8DAaYfa9ri5FboXQ2VPzK2WdqpXsXakkxs3gaJfeg3STiS99VQPz6cN7UrTs6YjnHeX9aq3rGpdzTe76';
+
+	const PUBLIC_KEY = process.env.PUBLIC_KEY;
 
 	const params = {
-		publicKey,
+		PUBLIC_KEY,
 		amount: parseInt(req.body.valueInput),
 		billId: random(36).toString(),
 		successUrl: 'http://localhost:8080/success',
@@ -114,6 +112,17 @@ app.post('/post-example', (req, res) => {
 			.catch((err) => console.log(err));
 	}
 });
+
+app.post('/write-balance', async (req, res) => {
+	const data = req.body;
+
+	const filter = { userId: data.userId };
+	const update = { balance: data.currentBalance - data.amount };
+
+	let doc = await Blog.findOne(filter);
+	await Blog.updateOne(filter, update);
+	await doc.save();
+})
 
 app.post('/update-ref-num', async (req, res) => {
 	const data = req.body;

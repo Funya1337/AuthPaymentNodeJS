@@ -143,6 +143,56 @@
 			align-items: center;
 			cursor: pointer;
 		}
+		.greybgstyle {
+			width: calc(50% - 10px);
+			background: #f8f6ff;
+			border: 1px solid #efecf9;
+			box-shadow: 0 4px 15px rgb(248 246 255 / 25%);
+			border-radius: 6px;
+			position: relative;
+			padding: 20px 0;
+		}
+		.badge {
+			position: absolute;
+			top: -15px;
+			left: 15px;
+			background: #efecfa;
+			border-radius: 100px;
+			padding: 10px 15px;
+			font-weight: 600;
+			font-size: 15px;
+			color: #c4beda;
+		}
+		.title111 {
+			color: #000;
+			font-weight: 600;
+			font-size: 22px;
+			text-align: center;
+			margin-bottom: 5px;	
+		}
+		.desc {
+			color: #b7aed3;
+			font-weight: 600;
+			font-size: 14px;
+			text-align: center;
+		}
+		.cursorStyle {
+			cursor: pointer;
+			width: 16px;
+			margin: auto;
+			height: 16px;
+		}
+		.minenum {
+			padding: 4px;
+			padding-left: 10px;
+			font-size: 15px;
+			line-height: 1;
+			text-shadow: none;
+			font-weight: 500;
+			box-shadow: 0 4px 15px rgb(248 246 255 / 25%);
+			color: #d3cfeb;
+			border-radius: 6px;
+		}
     </style>
 
     <title>Carix</title>
@@ -252,7 +302,7 @@
 								</div>
 								<div class="modal-body">
 									<div class="form-group">
-										<input type="number" class="form-control" id="valueInput" aria-describedby="emailHelp" placeholder="Введите сумму в рублях">
+										<input type="number" min="1" class="form-control" id="valueInput" aria-describedby="emailHelp" placeholder="Введите сумму в рублях">
 									  </div>
 								</div>
 								<div class="modal-footer">
@@ -326,107 +376,101 @@
                     <div class="row">
                         <div class="col-4">
                             <h5 class="card-title">Mines</h5>
-							<div style="color: #c5c0df; font-weight: 500; font-size: 15px;">Колличество бомб:</div>
-							<input style="width: 350px;" type="range" class="form-range" min="0" max="24" step="0.5" id="customRange3">
+							<div style="display: flex;">
+								<div style="color: #c5c0df; font-weight: 500; font-size: 15px;">Колличество бомб: </div>
+								<div class="minenum" id="bombnumId">13</div>
+							</div>
+							<input oninput="testFunc(this.value)" style="width: 350px;" type="range" class="form-range" min="1" max="23" step="1" id="customRange3">
 							<div style="color: #c5c0df; font-weight: 500; font-size: 15px;">Размер игры:</div>
 							<br/>
 							<div style="display: flex;">
-								<button type="button" class="btn moneyBtn">Min</button>
-								<button type="button" class="btn moneyBtn">Max</button>
-								<input type="number" style="width: 70px; margin-left: 10px; margin-right: 10px;" class="form-control" value="1">
-								<button type="button" class="btn moneyBtn">X2</button>
-								<button type="button" class="btn moneyBtn">/2</button>
+								<button onclick="setminValue()" type="button" class="btn moneyBtn">Min</button>
+								<button onclick="setmaxValue()" type="button" class="btn moneyBtn">Max</button>
+								<input min="1" type="number" style="width: 130px; margin-left: 10px; margin-right: 10px;" disabled id="gameBetId" class="form-control" value="1">
+								<button onclick="setmultValue()" type="button" class="btn moneyBtn">X2</button>
+								<button onclick="sethalfValue()" type="button" class="btn moneyBtn">/2</button>
 							</div>
 							<br/>
-							<button type="button" class="btn moneyBtn">Сделать ставку</button>
+							<button onclick="startMinesBtn()" style="display: none;" type="button" id="startBtnMines" class="btn moneyBtn">Сделать ставку</button>
+							<button onclick="vkAuthLogin()" style="display: none;" type="button" id="startBtnMinesAuth" class="btn moneyBtn">Нужно авторизоваться</button>
+							<button style="display: none;" type="button" id="takePrizeID" class="btn btn-success">Забрать выйгрыш!!!</button>
+							<div style="text-align: center; display: none;" id="noMoneyAlert" class="alert alert-danger" role="alert">
+								Не достаточно средств
+							</div>
 						</div>
-						<div class="col-8">
-							<div>
-								<div class="row">
-									<div class="col-1">
-										<span class="board"></span>
+						<div class="col-5">
+							<div style="display: flex;">
+								<span class="board" id="cel00" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel01" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel02" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel03" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel04" onclick="testFunc1(this.id)"></span>
+							</div>
+							<div style="display: flex;">
+								<span class="board" id="cel10" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel11" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel12" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel13" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel14" onclick="testFunc1(this.id)"></span>
+							</div>
+							<div style="display: flex;">
+								<span class="board" id="cel20" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel21" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel22" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel23" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel24" onclick="testFunc1(this.id)"></span>
+							</div>
+							<div style="display: flex;">
+								<span class="board" id="cel30" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel31" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel32" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel33" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel34" onclick="testFunc1(this.id)"></span>
+							</div>
+							<div style="display: flex;">
+								<span class="board" id="cel40" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel41" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel42" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel43" onclick="testFunc1(this.id)"></span>
+								<span class="board" id="cel44" onclick="testFunc1(this.id)"></span>
+							</div>
+						</div>
+						<div class="col-3">
+							<div style="display: flex;">
+								<div style="padding-right: 30px;" class="cursorStyle">
+									<img src="https://trix.win/icons/arrow.svg">
+								</div>
+								<div style="margin-right: 20px;" class="greybgstyle">
+									<div class="badge">
+										Шаг 1
 									</div>
-									<div class="col-1">
-										<span class="board"></span>
+									<div class="title111">
+										1.02
 									</div>
-									<div class="col-1">
-										<span class="board"></span>
+									<div class="desc">
+										x1.02
 									</div>
-									<div class="col-1">
-										<span class="board"></span>
+								</div>
+								<div class="greybgstyle">
+									<div class="badge">
+										Шаг 2
 									</div>
-									<div class="col-1">
-										<span class="board"></span>
+									<div class="title111">
+										1.02
 									</div>
-								  </div>
-								  <div class="row">
-									<div class="col-1">
-										<span class="board"></span>
+									<div class="desc">
+										x1.02
 									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-								  </div>
-								  <div class="row">
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-								  </div>
-								  <div class="row">
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-								  </div>
-								  <div class="row">
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-									<div class="col-1">
-										<span class="board"></span>
-									</div>
-								  </div>
+								</div>
+								<div style="margin-left: 13px;" class="cursorStyle">
+									<img style="transform: rotate(180deg);" src="https://trix.win/icons/arrow.svg">
+								</div>
+							</div>
+							<br/>
+							<br/>
+							<br/>
+							<div style="text-align: center; display: none;" id="looseAlert" class="alert alert-danger" role="alert">
+								Вы проиграли
 							</div>
 						</div>
                       </div>
@@ -592,6 +636,16 @@
 	  </div>
 	</div>
 	<script type="text/javascript">
+
+		let field = [
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0]];
+
+		let opened = 1;
+
 		function vkAuthLogin() {
 			VK.init({
 				apiId: 7876538
@@ -603,6 +657,164 @@
 				setUserData(response.session.user.first_name, response.session.user.last_name, response.session.user.id);
 				}
 			});
+		}
+
+		function setminValue() {
+			let gameBetId = document.getElementById("gameBetId");
+			gameBetId.value = 1;
+		}
+
+		function setmultValue() {
+			let gameBetId = document.getElementById("gameBetId");
+			gameBetId.value = gameBetId.value * 2;
+		}
+
+		function sethalfValue() {
+			let gameBetId = document.getElementById("gameBetId");
+			gameBetId.value = gameBetId.value / 2;
+		}
+
+		function setmaxValue() {
+			let gameBetId = document.getElementById("gameBetId");
+			fetch('/all-blogs')
+				.then(response => response.json())
+				.then(data => {
+					for (let i = 0; i < data.length; i++) {
+						if (data[i].userId == localStorage.getItem("userId")) {
+							if (data[i].signedIn) {
+								gameBetId.value = data[i].balance;
+							}
+						}
+					}
+				});
+		}
+
+		function writeMoney(amount, currentBalance) {
+			const userId = localStorage.getItem("userId");
+			const data = { amount, currentBalance, userId };
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			};
+			const response = fetch('/write-balance', options)
+				.then(res => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+		}
+
+		function startMinesBtn() {
+			field = [
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0],
+				[0, 0, 0, 0, 0]];
+			let startBtnMines = document.getElementById("startBtnMines");
+			let gameBetId = document.getElementById("gameBetId");
+			let customRange3 = document.getElementById("customRange3");
+			let looseAlert = document.getElementById("looseAlert");
+			let noMoneyAlert = document.getElementById("noMoneyAlert");
+			let currentBet = gameBetId.value;
+			let value = customRange3.value;
+			startBtnMines.style.display = "none";
+			looseAlert.style.display = "none";
+
+			fetch('/all-blogs')
+				.then(response => response.json())
+				.then(data => {
+					for (let i = 0; i < data.length; i++) {
+						if (data[i].userId == localStorage.getItem("userId")) {
+							if (data[i].signedIn) {
+								if (parseInt(currentBet) > data[i].balance) {
+									noMoneyAlert.style.display = "block";
+								} else {
+									opened = 1;
+									writeMoney(parseInt(currentBet), data[i].balance);
+									while(value >= 0) {
+										let num1 = Math.floor(Math.random() * 5);
+										let num2 = Math.floor(Math.random() * 5);
+										if (field[num1][num2] === 1) {
+											continue;
+										} else {
+											field[num1][num2] = 1;
+											value -= 1;
+										}
+									}
+
+									for (let i = 0; i < field.length; i++) {
+										for (let j = 0; j < field.length; j++) {
+											stringID = "cel" + i.toString() + j.toString();
+											let stringIDToChange = document.getElementById(stringID);
+											stringIDToChange.style.background ="#edebf4";
+										}
+									}
+								}
+							}
+						}
+					}
+				});
+		}
+
+		function testFunc(ish) {
+			let bombnumId = document.getElementById("bombnumId");
+			bombnumId.innerHTML = ish;
+		}
+
+		function testFunc1(id) {
+			let takePrizeID = document.getElementById("takePrizeID");
+			let looseAlert = document.getElementById("looseAlert");
+			let startBtnMines = document.getElementById("startBtnMines");
+			let customRange3 = document.getElementById("customRange3");
+			let customRange3Value = customRange3.value;
+			let cnt = 0;
+			if (looseAlert.style.display === "block") {
+				opened = 1;
+				console.log("You loose restart game!");
+			} else {
+				console.log(opened);
+				for (let i = 0; i < field.length; i++) {
+					for (let j = 0; j < field.length; j++) {
+						if (field[i][j] === 0) {
+							cnt += 1;
+						}
+					}
+				}
+				if (cnt != 25) {
+					takePrizeID.style.display = "block";
+					let celID = document.getElementById(id);
+					if (celID.style.cursor != "default") {
+						opened += 1;
+						opened *= customRange3Value;
+					}
+					celID.style.background = "green";
+					celID.style.cursor = "default";
+					if (field[id[3]][id[4]] === 1) {
+						for (let i = 0; i < field.length; i++) {
+							for (let j = 0; j < field.length; j++) {
+								if (field[i][j] === 1) {
+									stringID = "cel" + i.toString() + j.toString();
+									let stringIDToChange = document.getElementById(stringID);
+									stringIDToChange.style.background ="red";
+								} else {
+									stringID = "cel" + i.toString() + j.toString();
+									let stringIDToChange = document.getElementById(stringID);
+									stringIDToChange.style.background ="green";
+								}
+							}
+						}
+						looseAlert.style.display = "block";
+						takePrizeID.style.display = "none";
+						startBtnMines.style.display = "block";
+					}
+				}
+				console.log(id);
+			}
 		}
 
 		function paymentFunction() {
@@ -718,6 +930,13 @@
 		}
 
 		function testIsSignedIn() {
+			let startBtnMines = document.getElementById("startBtnMines");
+			let startBtnMinesAuth = document.getElementById("startBtnMinesAuth");
+			if (localStorage.getItem("userId") === null) {
+				startBtnMinesAuth.style.display = "Block";
+			} else {
+				startBtnMines.style.display = "Block";
+			}
 			fetch('/all-blogs')
 				.then(response => response.json())
 				.then(data => {

@@ -380,7 +380,7 @@
 								<div style="color: #c5c0df; font-weight: 500; font-size: 15px;">Колличество бомб: </div>
 								<div class="minenum" id="bombnumId">13</div>
 							</div>
-							<input oninput="testFunc(this.value)" style="width: 350px;" type="range" class="form-range" min="1" max="23" step="1" id="customRange3">
+							<input oninput="testFunc(this.value)" style="width: 350px;" type="range" class="form-range" min="3" max="24" step="1" id="customRange3">
 							<div style="color: #c5c0df; font-weight: 500; font-size: 15px;">Размер игры:</div>
 							<br/>
 							<div style="display: flex;">
@@ -393,7 +393,7 @@
 							<br/>
 							<button onclick="startMinesBtn()" style="display: none;" type="button" id="startBtnMines" class="btn moneyBtn">Сделать ставку</button>
 							<button onclick="vkAuthLogin()" style="display: none;" type="button" id="startBtnMinesAuth" class="btn moneyBtn">Нужно авторизоваться</button>
-							<button style="display: none;" type="button" id="takePrizeID" class="btn btn-success">Забрать выйгрыш!!!</button>
+							<button onclick="takePrizeFunc(this.innerText)" style="display: none;" type="button" id="takePrizeID" class="btn btn-success"></button>
 							<div style="text-align: center; display: none;" id="noMoneyAlert" class="alert alert-danger" role="alert">
 								Не достаточно средств
 							</div>
@@ -441,24 +441,24 @@
 									<img src="https://trix.win/icons/arrow.svg">
 								</div>
 								<div style="margin-right: 20px;" class="greybgstyle">
-									<div class="badge">
+									<div class="badge" id="multStep1">
 										Шаг 1
 									</div>
-									<div class="title111">
+									<div class="title111" id="multBalance1">
 										1.02
 									</div>
-									<div class="desc">
+									<div class="desc" id="multBalance11">
 										x1.02
 									</div>
 								</div>
-								<div class="greybgstyle">
+								<div class="greybgstyle" id="multStep2">
 									<div class="badge">
 										Шаг 2
 									</div>
-									<div class="title111">
+									<div class="title111" id="multBalance2">
 										1.02
 									</div>
-									<div class="desc">
+									<div class="desc" id="multBalance22">
 										x1.02
 									</div>
 								</div>
@@ -637,14 +637,18 @@
 	</div>
 	<script type="text/javascript">
 
+		let multArr1 = ["1.04", "1.08", "1.14", "1.19", "1.25", "1.32", "1.41", "1.49", "1.59", "1.70", "1.83",
+			 "1.99", "2.17", "2.38", "2.64", "2.97", "3.40", "3.96", "4.75", "5.94", "7.92", "11.88", "23.75", "26.89", "99.22"]
+			
+		let multArr2 = ["1.13", "1.24", "1.36", "1.50", "1.67", "1.87", "2.10", "2.38", "2.72", "3.14", "3.66",
+			 "4.32", "5.19", "6.34", "7.92", "10.18", "13.58", "19.00", "28.50", "47.50", "95.00", "285.00", "309.22", "314.55", "00.00"]
+
 		let field = [
 				[0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0]];
-
-		let opened = 1;
 
 		function vkAuthLogin() {
 			VK.init({
@@ -672,6 +676,42 @@
 		function sethalfValue() {
 			let gameBetId = document.getElementById("gameBetId");
 			gameBetId.value = gameBetId.value / 2;
+		}
+
+		function takePrizeFunc(value) {
+			fetch('/all-blogs')
+				.then(response => response.json())
+				.then(data => {
+					for (let i = 0; i < data.length; i++) {
+						if (data[i].userId == localStorage.getItem("userId")) {
+							if (data[i].signedIn) {
+								takePrizeFuncServer(data[i].balance, value);
+							}
+						}
+					}
+				})
+		}
+
+		function takePrizeFuncServer(currentBalance, value) {
+			const userId = localStorage.getItem("userId");
+			value = parseFloat(value.slice(16, value.length)).toFixed(2);
+			value = parseFloat(value);
+			const data = { value, currentBalance, userId };
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			};
+			const response = fetch('/get-money', options)
+				.then(res => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+			window.location.href = window.location.href.split( '#' )[0];
 		}
 
 		function setmaxValue() {
@@ -708,7 +748,10 @@
 				})
 		}
 
+		let moneyToGet = 0;
+
 		function startMinesBtn() {
+			moneyToGet = 0;
 			field = [
 				[0, 0, 0, 0, 0],
 				[0, 0, 0, 0, 0],
@@ -721,7 +764,7 @@
 			let looseAlert = document.getElementById("looseAlert");
 			let noMoneyAlert = document.getElementById("noMoneyAlert");
 			let currentBet = gameBetId.value;
-			let value = customRange3.value;
+			let value = customRange3.value - 1;
 			startBtnMines.style.display = "none";
 			looseAlert.style.display = "none";
 
@@ -734,7 +777,6 @@
 								if (parseInt(currentBet) > data[i].balance) {
 									noMoneyAlert.style.display = "block";
 								} else {
-									opened = 1;
 									writeMoney(parseInt(currentBet), data[i].balance);
 									while(value >= 0) {
 										let num1 = Math.floor(Math.random() * 5);
@@ -763,7 +805,27 @@
 
 		function testFunc(ish) {
 			let bombnumId = document.getElementById("bombnumId");
+			let multStep1 = document.getElementById("multStep1");
+			let multBalance1 = document.getElementById("multBalance1");
+			let multBalance11 = document.getElementById("multBalance11");
+			let multStep2 = document.getElementById("multStep2");
+			let multBalance2 = document.getElementById("multBalance2");
+			let multBalance22 = document.getElementById("multBalance22");
 			bombnumId.innerHTML = ish;
+			let multArr1 = ["1.04", "1.08", "1.14", "1.19", "1.25", "1.32", "1.41", "1.49", "1.59", "1.70", "1.83",
+			 "1.99", "2.17", "2.38", "2.64", "2.97", "3.40", "3.96", "4.75", "5.94", "7.92", "11.88", "23.75", "26.89", "99.22"]
+			
+			 let multArr2 = ["1.13", "1.24", "1.36", "1.50", "1.67", "1.87", "2.10", "2.38", "2.72", "3.14", "3.66",
+			 "4.32", "5.19", "6.34", "7.92", "10.18", "13.58", "19.00", "28.50", "47.50", "95.00", "285.00", "309.22", "314.55", "00.00"]
+			 
+			 for (let i = 3; i <= 24; i++) {
+				 if (parseInt(ish) === i) {
+					multBalance1.innerHTML = multArr1[i];
+					multBalance11.innerHTML = "x" + multArr1[i];
+					multBalance2.innerHTML = multArr2[i];
+					multBalance22.innerHTML = "x" + multArr2[i];
+				 }
+			 }
 		}
 
 		function testFunc1(id) {
@@ -771,13 +833,12 @@
 			let looseAlert = document.getElementById("looseAlert");
 			let startBtnMines = document.getElementById("startBtnMines");
 			let customRange3 = document.getElementById("customRange3");
+			let gameBetId = document.getElementById("gameBetId");
 			let customRange3Value = customRange3.value;
 			let cnt = 0;
 			if (looseAlert.style.display === "block") {
-				opened = 1;
 				console.log("You loose restart game!");
 			} else {
-				console.log(opened);
 				for (let i = 0; i < field.length; i++) {
 					for (let j = 0; j < field.length; j++) {
 						if (field[i][j] === 0) {
@@ -788,12 +849,10 @@
 				if (cnt != 25) {
 					takePrizeID.style.display = "block";
 					let celID = document.getElementById(id);
-					if (celID.style.cursor != "default") {
-						opened += 1;
-						opened *= customRange3Value;
-					}
 					celID.style.background = "green";
 					celID.style.cursor = "default";
+					moneyToGet += (gameBetId.value * multArr1[customRange3Value]);
+					takePrizeID.innerHTML = "Забрать выйгрыш: " + moneyToGet.toFixed(2);
 					if (field[id[3]][id[4]] === 1) {
 						for (let i = 0; i < field.length; i++) {
 							for (let j = 0; j < field.length; j++) {
@@ -811,9 +870,9 @@
 						looseAlert.style.display = "block";
 						takePrizeID.style.display = "none";
 						startBtnMines.style.display = "block";
+						moneyToGet = 0;
 					}
 				}
-				console.log(id);
 			}
 		}
 

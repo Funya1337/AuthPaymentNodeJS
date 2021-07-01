@@ -113,6 +113,16 @@ app.post('/post-example', (req, res) => {
 	}
 });
 
+app.post('/get-money', async (req, res) => {
+	const data = req.body;
+	const filter = { userId: data.userId };
+	const update = { balance: data.currentBalance + data.value };
+
+	let doc = await Blog.findOne(filter);
+	await Blog.updateOne(filter, update);
+	await doc.save();
+})
+
 app.post('/write-balance', async (req, res) => {
 	const data = req.body;
 
